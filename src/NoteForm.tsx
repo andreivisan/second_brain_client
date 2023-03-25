@@ -1,13 +1,29 @@
-import { useRef } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
+import { NoteData, Tag } from './App';
 
-export function NoteForm() {
+type NoteFormProps = {
+    onSubmit: (data: NoteData) => void
+}
+
+export function NoteForm({ onSubmit }: NoteFormProps) {
     const titleRef = useRef<HTMLInputElement>(null);
     const markdownRef = useRef<HTMLTextAreaElement>(null);
+    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+
+    function handleSubmit(formEvent: FormEvent) {
+        formEvent.preventDefault();
+
+        onSubmit({
+            title: titleRef.current!.value,
+            markdown: markdownRef.current!.value,
+            tags: []
+        })
+    }
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="flex flex-wrap mb-4">
                 <div className="w-full md:w-1/3 pr-4">
                     <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -18,6 +34,7 @@ export function NoteForm() {
                         id="title"
                         name="title"
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        required
                         ref={titleRef}
                     />
                 </div>
@@ -26,7 +43,21 @@ export function NoteForm() {
                     <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
                         Tags
                     </label>
-                    <CreatableReactSelect isMulti />
+                    <CreatableReactSelect value={selectedTags.map(tag => {
+                        return {
+                            label: tag.label,
+                            value: tag.id
+                        }
+                    })}
+                    onChange={tags => {
+                        setSelectedTags(tags.map(tag => {
+                            return {
+                                id: tag.value,
+                                label: tag.label
+                            }
+                        }))
+                    }}
+                    isMulti />
                 </div>
             </div>
 
@@ -39,6 +70,7 @@ export function NoteForm() {
                     name="content"
                     rows={15}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    required
                     ref={markdownRef}
                 ></textarea>
             </div>
