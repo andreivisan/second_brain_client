@@ -45,14 +45,14 @@ function App() {
 
   function onCreateNote({ tags, ...data }: NoteData) {
     setNotes(prevNotes => {
-      return [...prevNotes, {...data, id: uuidV4(), tagIds: tags.map(tag => tag.id}]
+      return [...prevNotes, { ...data, id: uuidV4(), tagIds: tags.map(tag => tag.id) }]
     })
   }
 
   return (
     <Routes>
       <Route path="/" element={<h1 className="text-3xl font-bold">Hi</h1>} />
-      <Route path="/new" element={<NewNote />} />
+      <Route path="/new" element={<NewNote onSubmit={onCreateNote} />} />
       <Route path="/:id" >
         // Index means that the path is the same as the parent path
         <Route index element={<h1>Show</h1>} />
