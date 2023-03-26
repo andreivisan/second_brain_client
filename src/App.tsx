@@ -4,6 +4,7 @@ import './index.css'
 import { useLocalStorage } from "./useLocalStorage"
 import { useMemo } from "react"
 import { v4 as uuidV4 } from "uuid"
+import { NoteList } from "./NoteList"
 
 export type Note = {
   id: string
@@ -49,10 +50,14 @@ function App() {
     })
   }
 
+  function addTag(tag: Tag) {
+    setTags(prevTags => [...prevTags, tag])
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<h1 className="text-3xl font-bold">Hi</h1>} />
-      <Route path="/new" element={<NewNote onSubmit={onCreateNote} />} />
+      <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags} />} />
+      <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags} />} />
       <Route path="/:id" >
         // Index means that the path is the same as the parent path
         <Route index element={<h1>Show</h1>} />
