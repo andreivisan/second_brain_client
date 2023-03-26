@@ -65,13 +65,16 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
                             return { label: tag.label, value: tag.id }
                         })}
                         onChange={tags => {
-                            setSelectedTags(availableTags.map(tag => {
-                                return {
-                                    id: tag.id,
-                                    label: tag.label
-                                }
-                            }))
+                            setSelectedTags(
+                                tags.map(tag => {
+                                    return {
+                                        label: tag.label,
+                                        id: tag.value,
+                                    }
+                                })
+                            )
                         }}
+                        isMulti
                         className="w-1/2"
                         placeholder="Tags"
                     />
@@ -92,7 +95,7 @@ function NoteCard({ id, title, tags }: SimplifiedNote) {
         <Link to={`/${id}`}>
             <div
                 key={id}
-                className="border border-gray-300 rounded p-4 bg-white">
+                className="border border-gray-300 rounded p-4 bg-white w-full h-32 text-left focus:outline-none focus:shadow-black-20 flex flex-col justify-center">
                     <h2 className="text-xl font-semibold mb-2 text-center">{title}</h2>
                     <div className="flex justify-center">
                         {tags.map((tag) => (

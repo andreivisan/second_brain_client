@@ -5,6 +5,8 @@ import { useLocalStorage } from "./useLocalStorage"
 import { useMemo } from "react"
 import { v4 as uuidV4 } from "uuid"
 import { NoteList } from "./NoteList"
+import { NoteLayout } from "./NoteLayout"
+import { Note } from "./Note"
 
 export type Note = {
   id: string
@@ -58,9 +60,9 @@ function App() {
     <Routes>
       <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags} />} />
       <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags} />} />
-      <Route path="/:id" >
+      <Route path="/:id" element={<NoteLayout notes={notesWithTags} />} >
         // Index means that the path is the same as the parent path
-        <Route index element={<h1>Show</h1>} />
+        <Route index element={<Note />} />
         <Route path="edit" element={<h1>Edit</h1>} />
       </Route>
       <Route path="*" element={<Navigate to={"/"} />} />
