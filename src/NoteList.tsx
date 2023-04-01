@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Note, Tag } from "./App";
+import Modal from "./Modal";
 
 type SimplifiedNote = {
     tags: Tag[]
@@ -18,6 +19,11 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [title, setTitle] = useState<string>("");
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+    
     const filteredNotes = useMemo(() => {
         return notes.filter(note => {
             return (title === "" || note.title.toLowerCase().includes(title.toLowerCase())) && 
@@ -39,6 +45,7 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
                             </button>
                         </Link>
                         <button
+                            onClick={() => openModal()}
                             type="button"
                             className="border border-gray-500 text-gray-500 font-semibold py-2 px-4 bg-white rounded">
                             Edit Tags
@@ -86,6 +93,12 @@ export function NoteList({ availableTags, notes }: NoteListProps) {
                     ))}
                 </div>
             </div>
+            
+            <Modal isOpen={isModalOpen} onClose={closeModal} >
+                <h2 className="text-xl font-semibold mb-4">Edit Tags</h2>
+
+                
+            </Modal>
         </>
     )
 }
@@ -108,6 +121,5 @@ function NoteCard({ id, title, tags }: SimplifiedNote) {
                     </div>
             </div>
         </Link>
-    )
-    
+    )   
 }
